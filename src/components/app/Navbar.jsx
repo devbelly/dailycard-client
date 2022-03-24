@@ -14,7 +14,6 @@ import { Button } from "@mui/material";
 import { useUser } from "./../user/hooks/useUser";
 import { useAuth } from "../../auth/useAuth";
 import Snackbars from "../../common/Snackbars";
-import { makeStyles } from "@material-ui/core/styles";
 
 export default function Navbar() {
   const navigate = useNavigate();

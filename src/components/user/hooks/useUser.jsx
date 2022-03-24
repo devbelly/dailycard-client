@@ -10,6 +10,7 @@ import { API_BASE_URL } from "../../../constants";
 
 async function getUser(user) {
   if (!user) return null;
+  console.log("user:" + user);
   return request({
     url: API_BASE_URL + "/user/me",
     method: "GET",

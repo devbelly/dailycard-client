@@ -2,14 +2,10 @@ import React from "react";
 
 import Typography from "@mui/material/Typography";
 import { Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { CssBaseline } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({}));
+// const useStyles = makeStyles((theme) => ({}));
 
 const Home = () => {
-  const classes = useStyles();
-
   return (
     <Box>
       <Typography variant="h2">DAILY CARD</Typography>
