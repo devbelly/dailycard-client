@@ -16,5 +16,13 @@ export function request(options) {
 
   options = Object.assign({}, defaults, options);
 
-  return fetch(options.url, options).then((response) => response.json());
+  return fetch(options.url, options).then((response) => {
+    if (!response.ok) {
+      return response.text().then((text) => {
+        throw new Error(text);
+      });
+    } else {
+      return response.json();
+    }
+  });
 }

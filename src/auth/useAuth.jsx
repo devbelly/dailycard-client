@@ -13,35 +13,37 @@ export function useAuth() {
   const { clearUser, updateUser } = useUser();
 
   async function login(signupRequest) {
-    const data = await request({
-      url: API_BASE_URL + "/auth/login",
-      method: "POST",
-      body: JSON.stringify(signupRequest),
-    });
-    if (data.status === 400) {
-      dispatch(setSnackbar(true, "error", data.message));
-      return;
-    }
+    try {
+      const data = await request({
+        url: API_BASE_URL + "/auth/login",
+        method: "POST",
+        body: JSON.stringify(signupRequest),
+      });
+      if ("username" in data && "token" in data) {
+        dispatch(setSnackbar(true, "success", "Login Success"));
+      }
 
-    if ("username" in data && "token" in data) {
-      dispatch(setSnackbar(true, "success", "Login Success"));
+      updateUser(data);
+    } catch (error) {
+      dispatch(setSnackbar(true, "error", JSON.parse(error.message).message));
     }
-
-    updateUser(data);
   }
 
   async function register(signupRequest, handleError) {
-    const data = await request({
-      url: API_BASE_URL + "/auth/signup",
-      method: "POST",
-      body: JSON.stringify(signupRequest),
-    });
+    try {
+      const data = await request({
+        url: API_BASE_URL + "/auth/signup",
+        method: "POST",
+        body: JSON.stringify(signupRequest),
+      });
 
-    //   .catch((err) => {
-    //   handleError(err);
-    //   dispatch(setSnackbar(true, "error", "register failed"));
-    // });
-    return data;
+      navigate("/login");
+      dispatch(setSnackbar(true, "success", "You're successfully registered."));
+    } catch (error) {
+      handleError(error);
+
+      dispatch(setSnackbar(true, "error", JSON.parse(error.message).message));
+    }
   }
 
   async function signin(username, password) {
@@ -53,10 +55,7 @@ export function useAuth() {
   }
 
   async function signup(signupRequest, handleError) {
-    register(signupRequest, handleError).then((response) => {
-      navigate("/login");
-      dispatch(setSnackbar(true, "success", "You're successfully registered."));
-    });
+    register(signupRequest, handleError);
   }
 
   function signout() {

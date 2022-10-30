@@ -7,10 +7,14 @@ import {
   setStoredUser,
 } from "./../../../user-storage/index";
 import { API_BASE_URL } from "../../../constants";
-
+import jwt_decode from "jwt-decode";
 async function getUser(user) {
   if (!user) return null;
-  console.log("user:" + user);
+  const { exp } = jwt_decode(user.token);
+  if (Date.now() >= exp * 1000) {
+    console.log("토큰만료 삭제하기");
+    return null;
+  }
   return request({
     url: API_BASE_URL + "/user/me",
     method: "GET",
@@ -24,6 +28,7 @@ export function useUser() {
     initialData: getStoredUser,
     onSuccess: (received) => {
       if (!received) {
+        // console.log(received);
         clearStoredUser();
       } else {
         setStoredUser(received);
